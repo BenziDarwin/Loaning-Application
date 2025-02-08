@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Plus, Pencil, Trash2 } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,16 +10,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { CreateRoleDialog } from "@/components/roles/create-role-dialog"
-import { EditRoleDialog } from "@/components/roles/edit-role-dialog"
-import { DeleteConfirmDialog } from "@/components/roles/delete-confirm-dialog"
+} from "@/components/ui/table";
+import { CreateRoleDialog } from "@/components/roles/create-role-dialog";
+import { EditRoleDialog } from "@/components/roles/edit-role-dialog";
+import { DeleteConfirmDialog } from "@/components/roles/delete-confirm-dialog";
 
 interface Role {
-  id: string
-  name: string
-  description: string
-  permissions: string[]
+  id: string;
+  name: string;
+  description: string;
+  permissions: string[];
 }
 
 const initialRoles: Role[] = [
@@ -35,37 +35,39 @@ const initialRoles: Role[] = [
     description: "Loan management access",
     permissions: ["loans.manage"],
   },
-]
+];
 
 export default function RolesPage() {
-  const [roles, setRoles] = useState<Role[]>(initialRoles)
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null)
-  const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [roles, setRoles] = useState<Role[]>(initialRoles);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const handleCreateRole = (role: Omit<Role, "id">) => {
     const newRole = {
       ...role,
       id: Math.random().toString(36).substr(2, 9),
-    }
-    setRoles([...roles, newRole])
-    setIsCreateOpen(false)
-  }
+    };
+    setRoles([...roles, newRole]);
+    setIsCreateOpen(false);
+  };
 
   const handleEditRole = (updatedRole: Role) => {
-    setRoles(roles.map((role) => (role.id === updatedRole.id ? updatedRole : role)))
-    setIsEditOpen(false)
-    setSelectedRole(null)
-  }
+    setRoles(
+      roles.map((role) => (role.id === updatedRole.id ? updatedRole : role)),
+    );
+    setIsEditOpen(false);
+    setSelectedRole(null);
+  };
 
   const handleDeleteRole = () => {
     if (selectedRole) {
-      setRoles(roles.filter((role) => role.id !== selectedRole.id))
-      setIsDeleteOpen(false)
-      setSelectedRole(null)
+      setRoles(roles.filter((role) => role.id !== selectedRole.id));
+      setIsDeleteOpen(false);
+      setSelectedRole(null);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -112,8 +114,8 @@ export default function RolesPage() {
                     variant="ghost"
                     size="icon"
                     onClick={() => {
-                      setSelectedRole(role)
-                      setIsEditOpen(true)
+                      setSelectedRole(role);
+                      setIsEditOpen(true);
                     }}
                   >
                     <Pencil className="h-4 w-4" />
@@ -122,8 +124,8 @@ export default function RolesPage() {
                     variant="ghost"
                     size="icon"
                     onClick={() => {
-                      setSelectedRole(role)
-                      setIsDeleteOpen(true)
+                      setSelectedRole(role);
+                      setIsDeleteOpen(true);
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -159,5 +161,5 @@ export default function RolesPage() {
         />
       )}
     </div>
-  )
+  );
 }

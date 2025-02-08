@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Table,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 const recentLoans = [
   {
@@ -28,7 +28,7 @@ const recentLoans = [
     date: "2024-03-18",
     status: "completed",
   },
-]
+];
 
 export function RecentLoans() {
   return (
@@ -53,8 +53,8 @@ export function RecentLoans() {
                   loan.status === "active"
                     ? "bg-green-100 text-green-800"
                     : loan.status === "overdue"
-                    ? "bg-red-100 text-red-800"
-                    : "bg-blue-100 text-blue-800"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-blue-100 text-blue-800"
                 }`}
               >
                 {loan.status}
@@ -64,5 +64,5 @@ export function RecentLoans() {
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }

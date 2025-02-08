@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,26 +9,26 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 interface CreateUserDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onSubmit: (user: {
-    name: string
-    email: string
-    role: string
-    status: "active" | "inactive"
-  }) => void
+    name: string;
+    email: string;
+    role: string;
+    status: "active" | "inactive";
+  }) => void;
 }
 
 export function CreateUserDialog({
@@ -36,19 +36,19 @@ export function CreateUserDialog({
   onOpenChange,
   onSubmit,
 }: CreateUserDialogProps) {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [role, setRole] = useState("")
-  const [status, setStatus] = useState<"active" | "inactive">("active")
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [status, setStatus] = useState<"active" | "inactive">("active");
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit({ name, email, role, status })
-    setName("")
-    setEmail("")
-    setRole("")
-    setStatus("active")
-  }
+    e.preventDefault();
+    onSubmit({ name, email, role, status });
+    setName("");
+    setEmail("");
+    setRole("");
+    setStatus("active");
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -95,7 +95,12 @@ export function CreateUserDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={status} onValueChange={(value: "active" | "inactive") => setStatus(value)}>
+              <Select
+                value={status}
+                onValueChange={(value: "active" | "inactive") =>
+                  setStatus(value)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -112,5 +117,5 @@ export function CreateUserDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,7 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, Building2, DollarSign, Activity, TrendingUp, AlertCircle } from "lucide-react"
-import { DashboardChart } from "@/components/dashboard/dashboard-chart"
-import { RecentLoans } from "@/components/dashboard/recent-loans"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Users,
+  Building2,
+  DollarSign,
+  Activity,
+  TrendingUp,
+  AlertCircle,
+} from "lucide-react";
+import { DashboardChart } from "@/components/dashboard/dashboard-chart";
+import { RecentLoans } from "@/components/dashboard/recent-loans";
 
 export default function DashboardPage() {
   return (
@@ -20,7 +27,9 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">1,234</div>
-            <p className="text-xs text-muted-foreground">+12% from last month</p>
+            <p className="text-xs text-muted-foreground">
+              +12% from last month
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -35,22 +44,30 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Portfolio</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Portfolio
+            </CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">45,231,000.89 UGX</div>
-            <p className="text-xs text-muted-foreground">+18% from last month</p>
+            <p className="text-xs text-muted-foreground">
+              +18% from last month
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Repayment Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Repayment Rate
+            </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">92.4%</div>
-            <p className="text-xs text-muted-foreground">+2.4% from last month</p>
+            <p className="text-xs text-muted-foreground">
+              +2.4% from last month
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -84,12 +101,16 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-500">32</div>
-            <p className="text-xs text-muted-foreground">Total value: 12,450,000.00 UGX</p>
+            <p className="text-xs text-muted-foreground">
+              Total value: 12,450,000.00 UGX
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm font-medium">Collection Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Collection Rate
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
@@ -99,7 +120,9 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm font-medium">Blacklisted Members</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Blacklisted Members
+            </CardTitle>
             <Users className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
@@ -109,5 +132,5 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

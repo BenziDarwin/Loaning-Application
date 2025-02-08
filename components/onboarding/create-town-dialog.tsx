@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,29 +9,31 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import type { Town } from "@/types/members"
+} from "@/components/ui/select";
+import type { Town } from "@/types/members";
 
 interface CreateTownDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (town: Omit<Town, "id" | "collectorPhone" | "loanPortfolio">) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (
+    town: Omit<Town, "id" | "collectorPhone" | "loanPortfolio">,
+  ) => void;
 }
 
 const collectors = [
   { id: "1", name: "John Doe", phone: "+254 712 345 678" },
   { id: "2", name: "Jane Smith", phone: "+254 723 456 789" },
   { id: "3", name: "Mike Johnson", phone: "+254 734 567 890" },
-]
+];
 
 export function CreateTownDialog({
   open,
@@ -44,22 +46,22 @@ export function CreateTownDialog({
     enrollmentDate: "",
     collector: "",
     profilePicture: "",
-  })
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSubmit({
       ...formData,
       enrollmentDate: new Date(formData.enrollmentDate),
-    })
+    });
     setFormData({
       name: "",
       nickname: "",
       enrollmentDate: "",
       collector: "",
       profilePicture: "",
-    })
-  }
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,7 +69,8 @@ export function CreateTownDialog({
         <DialogHeader>
           <DialogTitle>Add New Town</DialogTitle>
           <DialogDescription>
-            Enter town details to create a new record. Required fields are marked with *.
+            Enter town details to create a new record. Required fields are
+            marked with *.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -77,7 +80,9 @@ export function CreateTownDialog({
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
               />
             </div>
@@ -86,7 +91,9 @@ export function CreateTownDialog({
               <Input
                 id="nickname"
                 value={formData.nickname}
-                onChange={(e) => setFormData({ ...formData, nickname: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, nickname: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -95,7 +102,9 @@ export function CreateTownDialog({
                 id="enrollmentDate"
                 type="date"
                 value={formData.enrollmentDate}
-                onChange={(e) => setFormData({ ...formData, enrollmentDate: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, enrollmentDate: e.target.value })
+                }
                 required
               />
             </div>
@@ -103,7 +112,9 @@ export function CreateTownDialog({
               <Label htmlFor="collector">Collector *</Label>
               <Select
                 value={formData.collector}
-                onValueChange={(value) => setFormData({ ...formData, collector: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, collector: value })
+                }
                 required
               >
                 <SelectTrigger>
@@ -123,7 +134,9 @@ export function CreateTownDialog({
               <Input
                 id="profilePicture"
                 value={formData.profilePicture}
-                onChange={(e) => setFormData({ ...formData, profilePicture: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, profilePicture: e.target.value })
+                }
               />
             </div>
           </div>
@@ -133,5 +146,5 @@ export function CreateTownDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,19 +9,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface CreateRoleDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onSubmit: (role: {
-    name: string
-    description: string
-    permissions: string[]
-  }) => void
+    name: string;
+    description: string;
+    permissions: string[];
+  }) => void;
 }
 
 const availablePermissions = [
@@ -29,32 +29,32 @@ const availablePermissions = [
   { id: "roles.manage", label: "Manage Roles" },
   { id: "loans.manage", label: "Manage Loans" },
   { id: "reports.view", label: "View Reports" },
-]
+];
 
 export function CreateRoleDialog({
   open,
   onOpenChange,
   onSubmit,
 }: CreateRoleDialogProps) {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [permissions, setPermissions] = useState<string[]>([])
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [permissions, setPermissions] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit({ name, description, permissions })
-    setName("")
-    setDescription("")
-    setPermissions([])
-  }
+    e.preventDefault();
+    onSubmit({ name, description, permissions });
+    setName("");
+    setDescription("");
+    setPermissions([]);
+  };
 
   const togglePermission = (permission: string) => {
     setPermissions(
       permissions.includes(permission)
         ? permissions.filter((p) => p !== permission)
-        : [...permissions, permission]
-    )
-  }
+        : [...permissions, permission],
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -89,7 +89,10 @@ export function CreateRoleDialog({
               <Label>Permissions</Label>
               <div className="space-y-2">
                 {availablePermissions.map((permission) => (
-                  <div key={permission.id} className="flex items-center space-x-2">
+                  <div
+                    key={permission.id}
+                    className="flex items-center space-x-2"
+                  >
                     <Checkbox
                       id={permission.id}
                       checked={permissions.includes(permission.id)}
@@ -112,5 +115,5 @@ export function CreateRoleDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

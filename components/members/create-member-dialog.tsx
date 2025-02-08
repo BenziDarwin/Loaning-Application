@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,31 +9,37 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import type { Member, Gender } from "@/types/members"
+} from "@/components/ui/select";
+import type { Member, Gender } from "@/types/members";
 
 interface CreateMemberDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (member: Omit<Member, "id" | "status" | "blacklistHistory" | "loanHistory" | "grossLent" | "netProfit" | "totalCycle" | "clientValue">) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (
+    member: Omit<
+      Member,
+      | "id"
+      | "status"
+      | "blacklistHistory"
+      | "loanHistory"
+      | "grossLent"
+      | "netProfit"
+      | "totalCycle"
+      | "clientValue"
+    >,
+  ) => void;
 }
 
-const regions = [
-  "Nairobi",
-  "Mombasa",
-  "Kisumu",
-  "Nakuru",
-  "Eldoret",
-]
+const regions = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"];
 
 export function CreateMemberDialog({
   open,
@@ -53,17 +59,17 @@ export function CreateMemberDialog({
     profilePicture: "",
     idFrontImage: "",
     idBackImage: "",
-  })
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSubmit({
       ...formData,
       dateOfBirth: new Date(formData.dateOfBirth),
       enrollmentDate: new Date(),
       collector: "Auto-assigned", // This would be determined based on region
-    })
-  }
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -71,7 +77,8 @@ export function CreateMemberDialog({
         <DialogHeader>
           <DialogTitle>Add New Member</DialogTitle>
           <DialogDescription>
-            Enter member details to create a new account. Required fields are marked with *.
+            Enter member details to create a new account. Required fields are
+            marked with *.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -81,7 +88,9 @@ export function CreateMemberDialog({
               <Input
                 id="firstName"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, firstName: e.target.value })
+                }
                 required
               />
             </div>
@@ -90,7 +99,9 @@ export function CreateMemberDialog({
               <Input
                 id="secondName"
                 value={formData.secondName}
-                onChange={(e) => setFormData({ ...formData, secondName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, secondName: e.target.value })
+                }
                 required
               />
             </div>
@@ -99,7 +110,9 @@ export function CreateMemberDialog({
               <Input
                 id="thirdName"
                 value={formData.thirdName}
-                onChange={(e) => setFormData({ ...formData, thirdName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, thirdName: e.target.value })
+                }
                 required
               />
             </div>
@@ -108,7 +121,9 @@ export function CreateMemberDialog({
               <Input
                 id="idNumber"
                 value={formData.idNumber}
-                onChange={(e) => setFormData({ ...formData, idNumber: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, idNumber: e.target.value })
+                }
                 required
               />
             </div>
@@ -118,7 +133,9 @@ export function CreateMemberDialog({
                 id="dateOfBirth"
                 type="date"
                 value={formData.dateOfBirth}
-                onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, dateOfBirth: e.target.value })
+                }
                 required
               />
             </div>
@@ -126,7 +143,9 @@ export function CreateMemberDialog({
               <Label htmlFor="gender">Gender *</Label>
               <Select
                 value={formData.gender}
-                onValueChange={(value: Gender) => setFormData({ ...formData, gender: value })}
+                onValueChange={(value: Gender) =>
+                  setFormData({ ...formData, gender: value })
+                }
                 required
               >
                 <SelectTrigger>
@@ -143,7 +162,9 @@ export function CreateMemberDialog({
               <Label htmlFor="region">Region *</Label>
               <Select
                 value={formData.region}
-                onValueChange={(value) => setFormData({ ...formData, region: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, region: value })
+                }
                 required
               >
                 <SelectTrigger>
@@ -163,7 +184,9 @@ export function CreateMemberDialog({
               <Input
                 id="phoneNumber"
                 value={formData.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phoneNumber: e.target.value })
+                }
                 required
               />
             </div>
@@ -173,7 +196,9 @@ export function CreateMemberDialog({
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -181,7 +206,9 @@ export function CreateMemberDialog({
               <Input
                 id="profilePicture"
                 value={formData.profilePicture}
-                onChange={(e) => setFormData({ ...formData, profilePicture: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, profilePicture: e.target.value })
+                }
                 required
               />
             </div>
@@ -190,7 +217,9 @@ export function CreateMemberDialog({
               <Input
                 id="idFrontImage"
                 value={formData.idFrontImage}
-                onChange={(e) => setFormData({ ...formData, idFrontImage: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, idFrontImage: e.target.value })
+                }
                 required
               />
             </div>
@@ -199,7 +228,9 @@ export function CreateMemberDialog({
               <Input
                 id="idBackImage"
                 value={formData.idBackImage}
-                onChange={(e) => setFormData({ ...formData, idBackImage: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, idBackImage: e.target.value })
+                }
                 required
               />
             </div>
@@ -210,5 +241,5 @@ export function CreateMemberDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

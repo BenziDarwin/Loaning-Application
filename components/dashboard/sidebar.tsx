@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import {
   Building2,
   ChevronDown,
@@ -11,21 +11,21 @@ import {
   Settings,
   Users,
   UserPlus,
-} from "lucide-react"
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 
 interface SidebarProps {
-  isOpen: boolean
-  setIsOpen: (value: boolean) => void
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
 }
 
 export function Sidebar({ isOpen }: SidebarProps) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const routes = [
     {
@@ -76,13 +76,13 @@ export function Sidebar({ isOpen }: SidebarProps) {
       href: "/dashboard/settings",
       color: "text-gray-500",
     },
-  ]
+  ];
 
   return (
     <div
       className={cn(
         "relative h-full bg-card border-r pt-4 px-3",
-        isOpen ? "w-60" : "w-[70px]"
+        isOpen ? "w-60" : "w-[70px]",
       )}
     >
       <div className="flex items-center gap-2 px-2">
@@ -99,12 +99,15 @@ export function Sidebar({ isOpen }: SidebarProps) {
                 collapsible
                 className="space-y-2"
               >
-                <AccordionItem value={route.label.toLowerCase()} className="border-none">
+                <AccordionItem
+                  value={route.label.toLowerCase()}
+                  className="border-none"
+                >
                   <AccordionTrigger
                     className={cn(
                       "flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 [&[data-state=open]>div>svg]:rotate-0 hover:no-underline",
                       pathname.includes(route.href) &&
-                        "bg-gray-100 text-gray-900"
+                        "bg-gray-100 text-gray-900",
                     )}
                   >
                     <div className="flex items-center gap-2">
@@ -120,7 +123,8 @@ export function Sidebar({ isOpen }: SidebarProps) {
                           href={item.href}
                           className={cn(
                             "text-sm text-gray-500 hover:text-gray-900",
-                            pathname === item.href && "text-gray-900 font-medium"
+                            pathname === item.href &&
+                              "text-gray-900 font-medium",
                           )}
                         >
                           {item.label}
@@ -130,7 +134,7 @@ export function Sidebar({ isOpen }: SidebarProps) {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-            )
+            );
           }
 
           return (
@@ -139,13 +143,13 @@ export function Sidebar({ isOpen }: SidebarProps) {
               href={route.href}
               className={cn(
                 "flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 no-underline",
-                pathname === route.href && "bg-gray-100 text-gray-900"
+                pathname === route.href && "bg-gray-100 text-gray-900",
               )}
             >
               <route.icon className={cn("h-5 w-5", route.color)} />
               {isOpen && route.label}
             </Link>
-          )
+          );
         })}
       </div>
       <div className="absolute bottom-4 w-full px-3">
@@ -158,5 +162,5 @@ export function Sidebar({ isOpen }: SidebarProps) {
         </Link>
       </div>
     </div>
-  )
+  );
 }

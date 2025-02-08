@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,30 +9,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 interface User {
-  id: string
-  name: string
-  email: string
-  role: string
-  status: "active" | "inactive"
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: "active" | "inactive";
 }
 
 interface EditUserDialogProps {
-  user: User
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (user: User) => void
+  user: User;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (user: User) => void;
 }
 
 export function EditUserDialog({
@@ -41,28 +41,28 @@ export function EditUserDialog({
   onOpenChange,
   onSubmit,
 }: EditUserDialogProps) {
-  const [name, setName] = useState(user.name)
-  const [email, setEmail] = useState(user.email)
-  const [role, setRole] = useState(user.role)
-  const [status, setStatus] = useState<"active" | "inactive">(user.status)
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [role, setRole] = useState(user.role);
+  const [status, setStatus] = useState<"active" | "inactive">(user.status);
 
   useEffect(() => {
-    setName(user.name)
-    setEmail(user.email)
-    setRole(user.role)
-    setStatus(user.status)
-  }, [user])
+    setName(user.name);
+    setEmail(user.email);
+    setRole(user.role);
+    setStatus(user.status);
+  }, [user]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSubmit({
       id: user.id,
       name,
       email,
       role,
       status,
-    })
-  }
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,7 +109,12 @@ export function EditUserDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select value={status} onValueChange={(value: "active" | "inactive") => setStatus(value)}>
+              <Select
+                value={status}
+                onValueChange={(value: "active" | "inactive") =>
+                  setStatus(value)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -126,5 +131,5 @@ export function EditUserDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

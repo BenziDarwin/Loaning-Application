@@ -1,6 +1,14 @@
-"use client"
+"use client";
 
-import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import {
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const data = [
   { name: "Jan", loans: 4000, collections: 2400 },
@@ -9,7 +17,7 @@ const data = [
   { name: "Apr", loans: 2780, collections: 3908 },
   { name: "May", loans: 1890, collections: 4800 },
   { name: "Jun", loans: 2390, collections: 3800 },
-]
+];
 
 export function DashboardChart() {
   return (
@@ -23,5 +31,5 @@ export function DashboardChart() {
         <Line type="monotone" dataKey="collections" stroke="#3b82f6" />
       </LineChart>
     </ResponsiveContainer>
-  )
+  );
 }
