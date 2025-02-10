@@ -18,6 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Image from "next/image";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -86,8 +87,16 @@ export function Sidebar({ isOpen }: SidebarProps) {
       )}
     >
       <div className="flex items-center gap-2 px-2">
-        <Building2 className="h-8 w-8 text-primary" />
-        {isOpen && <span className="font-bold text-xl">Mpesa</span>}
+        {isOpen && (
+          <span className="font-bold text-xl">
+            <Image
+              alt="Yunesta"
+              width={200}
+              height={200}
+              src="/images/logo.png"
+            />
+          </span>
+        )}
       </div>
       <div className="mt-8 flex flex-col gap-2">
         {routes.map((route) => {

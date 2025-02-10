@@ -32,8 +32,8 @@ export interface Member {
   idNumber: string; // Required
   dateOfBirth: Date; // Required
   gender: Gender; // Required
-  region: string; // Required
-  collector: string; // Auto-assigned based on region
+  town: string; // Required
+  collector: string; // Auto-assigned based on town
   email?: string; // Optional
   phoneNumber: string; // Required
   profilePicture: string; // Required - URL to stored image
@@ -100,7 +100,7 @@ export interface Loan {
   id: string;
   memberId: string;
   memberName: string; // Auto-filled
-  region: string; // Auto-filled
+  town: string; // Auto-filled
   phoneNumber: string; // Auto-filled
   amount: number;
   interestPercentage: number;

@@ -39,7 +39,7 @@ interface CreateMemberDialogProps {
   ) => void;
 }
 
-const regions = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"];
+const towns = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"];
 
 const collectors = {
   Nairobi: "John Doe",
@@ -61,7 +61,7 @@ export function CreateMemberDialog({
     idNumber: "",
     dateOfBirth: "",
     gender: "" as Gender,
-    region: "",
+    town: "",
     collector: "",
     email: "",
     phoneNumber: "",
@@ -70,10 +70,10 @@ export function CreateMemberDialog({
     idBackImage: "",
   });
 
-  const handleRegionChange = (value: string) => {
+  const handleTownChange = (value: string) => {
     setFormData({
       ...formData,
-      region: value,
+      town: value,
       collector: collectors[value as keyof typeof collectors],
     });
   };
@@ -92,7 +92,7 @@ export function CreateMemberDialog({
       idNumber: "",
       dateOfBirth: "",
       gender: "" as Gender,
-      region: "",
+      town: "",
       collector: "",
       email: "",
       phoneNumber: "",
@@ -193,19 +193,19 @@ export function CreateMemberDialog({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="region">Region *</Label>
+              <Label htmlFor="town">Town *</Label>
               <Select
-                value={formData.region}
-                onValueChange={handleRegionChange}
+                value={formData.town}
+                onValueChange={handleTownChange}
                 required
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select region" />
+                  <SelectValue placeholder="Select town" />
                 </SelectTrigger>
                 <SelectContent>
-                  {regions.map((region) => (
-                    <SelectItem key={region} value={region}>
-                      {region}
+                  {towns.map((town) => (
+                    <SelectItem key={town} value={town}>
+                      {town}
                     </SelectItem>
                   ))}
                 </SelectContent>

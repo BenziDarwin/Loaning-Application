@@ -39,7 +39,7 @@ interface CreateMemberDialogProps {
   ) => void;
 }
 
-const regions = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"];
+const towns = ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"];
 
 export function CreateMemberDialog({
   open,
@@ -53,7 +53,7 @@ export function CreateMemberDialog({
     idNumber: "",
     dateOfBirth: "",
     gender: "" as Gender,
-    region: "",
+    town: "",
     email: "",
     phoneNumber: "",
     profilePicture: "",
@@ -67,7 +67,7 @@ export function CreateMemberDialog({
       ...formData,
       dateOfBirth: new Date(formData.dateOfBirth),
       enrollmentDate: new Date(),
-      collector: "Auto-assigned", // This would be determined based on region
+      collector: "Auto-assigned", // This would be determined based on town
     });
   };
 
@@ -159,21 +159,21 @@ export function CreateMemberDialog({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="region">Region *</Label>
+              <Label htmlFor="town">Town *</Label>
               <Select
-                value={formData.region}
+                value={formData.town}
                 onValueChange={(value) =>
-                  setFormData({ ...formData, region: value })
+                  setFormData({ ...formData, town: value })
                 }
                 required
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select region" />
+                  <SelectValue placeholder="Select town" />
                 </SelectTrigger>
                 <SelectContent>
-                  {regions.map((region) => (
-                    <SelectItem key={region} value={region}>
-                      {region}
+                  {towns.map((town) => (
+                    <SelectItem key={town} value={town}>
+                      {town}
                     </SelectItem>
                   ))}
                 </SelectContent>

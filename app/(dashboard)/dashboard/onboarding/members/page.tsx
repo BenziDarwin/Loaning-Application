@@ -70,7 +70,7 @@ export default function OnboardingMembersPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Region</TableHead>
+              <TableHead>Town</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Collector</TableHead>
@@ -83,7 +83,7 @@ export default function OnboardingMembersPage() {
                 <TableCell>
                   {member.firstName} {member.secondName} {member.thirdName}
                 </TableCell>
-                <TableCell>{member.region}</TableCell>
+                <TableCell>{member.town}</TableCell>
                 <TableCell>{member.phoneNumber}</TableCell>
                 <TableCell>
                   <span

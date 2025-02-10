@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Building2 } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -31,10 +32,14 @@ export default function LoginPage() {
 
       <Card className="w-[400px] relative z-10 backdrop-blur-sm bg-white/90 dark:bg-gray-900/90">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <Building2 className="h-12 w-12 text-primary" />
-          </div>
-          <CardTitle className="text-2xl font-bold">Welcome to Mpesa</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            <Image
+              src="/images/logo.png"
+              height={300}
+              width={300}
+              alt="Yunesta"
+            />
+          </CardTitle>
           <CardDescription>
             Enter your credentials to access the dashboard
           </CardDescription>
