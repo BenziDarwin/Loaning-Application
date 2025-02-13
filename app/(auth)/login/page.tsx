@@ -13,15 +13,33 @@ import {
 } from "@/components/ui/card";
 import { Building2 } from "lucide-react";
 import Image from "next/image";
+import { login } from "@/core/authentication/api";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/dashboard");
+    try {
+      // Call the login function from the authentication API
+      await login({ email, password });
+      toast({
+        title: "Login successful",
+        description: "Redirecting to dashboard",
+        variant: "default",
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Invalid email or password",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
