@@ -16,5 +16,5 @@ export function middleware(req: NextRequest) {
 
 // Apply middleware only to protected routes
 export const config = {
-  matcher: ["/dashboard/:path*", "/profile/:path*"], // Protect these routes
+  matcher: ["/dashboard/:path*"], // Protect these routes
 };

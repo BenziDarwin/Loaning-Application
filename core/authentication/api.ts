@@ -1,9 +1,15 @@
 import Cookies from "js-cookie";
-import { AxiosInstance } from "../baseUrl";
+import axios from "axios";
+import { baseURL } from "../baseUrl";
 
-export const login = async (data: any) => {
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export const login = async (data: LoginRequest): Promise<boolean> => {
   try {
-    let response = await AxiosInstance.post("auth/authenticate", data);
+    let response = await axios.post(`${baseURL}auth/authenticate`, data);
 
     // Store the token and user data in cookies
     Cookies.set("access-token", response.data.token, {

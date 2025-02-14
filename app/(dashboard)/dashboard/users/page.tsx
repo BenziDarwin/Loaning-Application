@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import {
@@ -14,34 +14,11 @@ import {
 import { CreateUserDialog } from "@/components/users/create-user-dialog";
 import { EditUserDialog } from "@/components/users/edit-user-dialog";
 import { DeleteConfirmDialog } from "@/components/users/delete-confirm-dialog";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: "active" | "inactive";
-}
-
-const initialUsers: User[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "Admin",
-    status: "active",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "Manager",
-    status: "active",
-  },
-];
+import { deleteUser, getUsers, updateUser } from "@/core/user/api";
+import { User } from "@/types/users";
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -50,27 +27,53 @@ export default function UsersPage() {
   const handleCreateUser = (user: Omit<User, "id">) => {
     const newUser = {
       ...user,
-      id: Math.random().toString(36).substr(2, 9),
+      id: 0,
     };
     setUsers([...users, newUser]);
     setIsCreateOpen(false);
   };
 
-  const handleEditUser = (updatedUser: User) => {
-    setUsers(
-      users.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
-    );
-    setIsEditOpen(false);
-    setSelectedUser(null);
-  };
-
-  const handleDeleteUser = () => {
-    if (selectedUser) {
-      setUsers(users.filter((user) => user.id !== selectedUser.id));
-      setIsDeleteOpen(false);
+  const handleEditUser = async (updatedUser: User) => {
+    try {
+      // Update the user on the server
+      await updateUser(updatedUser.id, updatedUser);
+      setUsers(
+        users.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
+      );
+      setIsEditOpen(false);
       setSelectedUser(null);
+    } catch (error) {
+      console.error("Failed to update user", error);
     }
   };
+
+  const handleDeleteUser = async () => {
+    try {
+      if (selectedUser) {
+        // Delete the user from the server
+        await deleteUser(selectedUser.id);
+        setUsers(users.filter((user) => user.id !== selectedUser.id));
+        setIsDeleteOpen(false);
+        setSelectedUser(null);
+      }
+    } catch (error) {
+      console.error("Failed to delete user", error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch users from the server
+    const fetchUsers = async () => {
+      try {
+        const response = await getUsers();
+        console.log(response);
+        setUsers(response);
+      } catch (error) {
+        console.error("Failed to fetch users", error);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -103,7 +106,7 @@ export default function UsersPage() {
               <TableRow key={user.id}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
+                <TableCell>{user.roles[0].name}</TableCell>
                 <TableCell>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

@@ -19,16 +19,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { User } from "@/types/users";
+import { Role, UserRole, UserStatus } from "@/types/roles";
 
 interface CreateUserDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (user: {
-    name: string;
-    email: string;
-    role: string;
-    status: "active" | "inactive";
-  }) => void;
+  onSubmit: (user: Omit<User, "id">) => void;
 }
 
 export function CreateUserDialog({
@@ -38,16 +35,23 @@ export function CreateUserDialog({
 }: CreateUserDialogProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [status, setStatus] = useState<"active" | "inactive">("active");
+  const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
+  const [status, setStatus] = useState<UserStatus>("ACTIVE");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, email, role, status });
+    onSubmit({
+      name,
+      email,
+      roles: selectedRoles,
+      status,
+    });
+
+    // Reset form
     setName("");
     setEmail("");
-    setRole("");
-    setStatus("active");
+    setSelectedRoles([]);
+    setStatus("ACTIVE");
   };
 
   return (
@@ -59,14 +63,15 @@ export function CreateUserDialog({
             Add a new user to the system. Fill in all required fields.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 py-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                placeholder="Enter user name"
                 required
               />
             </div>
@@ -77,19 +82,39 @@ export function CreateUserDialog({
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email address"
                 required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Select value={role} onValueChange={setRole} required>
+              <Label htmlFor="roles">Roles</Label>
+              <Select
+                value={
+                  selectedRoles.length > 0 ? selectedRoles[0].name : undefined
+                }
+                onValueChange={(roleName) => {
+                  // This is a simplified example - you might want to fetch the full role object
+                  // or handle multiple role selection differently
+                  setSelectedRoles([
+                    {
+                      id: 0, // This should be handled properly in a real implementation
+                      name: roleName as UserRole,
+                      description: "",
+                      permissions: [],
+                    },
+                  ]);
+                }}
+                required
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Admin">Admin</SelectItem>
-                  <SelectItem value="Manager">Manager</SelectItem>
-                  <SelectItem value="User">User</SelectItem>
+                  <SelectItem value="ROLE_ADMIN">Admin</SelectItem>
+                  <SelectItem value="ROLE_LOAN_OFFICER">
+                    Loan Officer
+                  </SelectItem>
+                  <SelectItem value="ROLE_USER">User</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -97,16 +122,14 @@ export function CreateUserDialog({
               <Label htmlFor="status">Status</Label>
               <Select
                 value={status}
-                onValueChange={(value: "active" | "inactive") =>
-                  setStatus(value)
-                }
+                onValueChange={(value: UserStatus) => setStatus(value)}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Inactive</SelectItem>
                 </SelectContent>
               </Select>
             </div>

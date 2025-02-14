@@ -1,24 +1,23 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import {
-  Building2,
-  ChevronDown,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  Users,
-  UserPlus,
-} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
+import Cookies from "js-cookie";
+import {
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -27,6 +26,7 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const routes = [
     {
@@ -161,14 +161,18 @@ export function Sidebar({ isOpen }: SidebarProps) {
           );
         })}
       </div>
-      <div className="absolute bottom-4 w-full px-3">
-        <Link
-          href="/login"
+      <div className="absolute bottom-4 left-1 w-full px-3">
+        <div
+          onClick={() => {
+            Cookies.remove("access-token");
+            Cookies.remove("user");
+            router.push("/");
+          }}
           className="flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 no-underline"
         >
           <LogOut className="h-5 w-5" />
           {isOpen && "Logout"}
-        </Link>
+        </div>
       </div>
     </div>
   );
