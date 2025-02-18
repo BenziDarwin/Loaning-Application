@@ -18,27 +18,27 @@ import { getTowns } from "@/core/towns/api";
 export default function OnboardingTownsPage() {
   const [towns, setTowns] = useState<Town[]>([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response = await getTowns();
-        console.log(response);
+        setIsLoading(true);
+        const response = await getTowns();
         setTowns(response);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  const handleCreateTown = (
-    town: Omit<Town, "id" | "collectorPhone" | "loanPortfolio">,
-  ) => {
+  const handleCreateTown = (town: Town) => {
     const newTown: Town = {
       ...town,
-      id: Math.random().toString(36).substr(2, 9),
-      collectorPhone: "Auto-filled based on collector", // This would be filled from collector data
+      collectorPhone: "Auto-filled based on collector",
       loanPortfolio: 0,
     };
     setTowns([...towns, newTown]);
@@ -73,28 +73,40 @@ export default function OnboardingTownsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {towns.map((town) => (
-              <TableRow key={town.id}>
-                <TableCell className="font-medium">{town.name}</TableCell>
-                <TableCell>{town.nickname || "N/A"}</TableCell>
-                <TableCell>
-                  {town.collector.firstName +
-                    " " +
-                    town.collector.secondName +
-                    " " +
-                    town.collector.thirdName}
-                </TableCell>
-                <TableCell>
-                  {town.enrollmentDate.toLocaleDateString()}
-                </TableCell>
-                <TableCell>${town.loanPortfolio.toLocaleString()}</TableCell>
-                <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    View Details
-                  </Button>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-4">
+                  Loading...
                 </TableCell>
               </TableRow>
-            ))}
+            ) : towns.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-4">
+                  No towns registered yet
+                </TableCell>
+              </TableRow>
+            ) : (
+              towns.map((town) => (
+                <TableRow key={town.id}>
+                  <TableCell className="font-medium">{town.name}</TableCell>
+                  <TableCell>{town.nickname || "N/A"}</TableCell>
+                  <TableCell>
+                    {town.collector?.firstName
+                      ? `${town.collector.firstName} ${town.collector.secondName} ${town.collector.thirdName}`
+                      : "N/A"}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(town.enrollmentDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>${town.loanPortfolio.toLocaleString()}</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="sm">
+                      View Details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

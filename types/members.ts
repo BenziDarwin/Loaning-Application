@@ -52,7 +52,7 @@ export interface Member {
 }
 
 export interface Town {
-  id: string;
+  id?: number;
   name: string; // Required
   nickname?: string; // Optional
   enrollmentDate: Date; // Required

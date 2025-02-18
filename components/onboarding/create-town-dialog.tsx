@@ -19,33 +19,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Town } from "@/types/members";
+import type { Collector, Town } from "@/types/members";
 
 interface CreateTownDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (
-    town: Omit<Town, "id" | "collectorPhone" | "loanPortfolio">,
-  ) => void;
+  onSubmit: (town: Town) => void;
 }
-
-const collectors = [
-  { id: "1", name: "John Doe", phone: "+254 712 345 678" },
-  { id: "2", name: "Jane Smith", phone: "+254 723 456 789" },
-  { id: "3", name: "Mike Johnson", phone: "+254 734 567 890" },
-];
 
 export function CreateTownDialog({
   open,
   onOpenChange,
   onSubmit,
 }: CreateTownDialogProps) {
-  const [formData, setFormData] = useState({
+  const [collectors, setCollectors] = useState<Collector[]>([]);
+  const [selectedCollector, setSelectedCollector] =
+    useState<Collector | null>();
+  const [formData, setFormData] = useState<Town>({
     name: "",
     nickname: "",
-    enrollmentDate: "",
-    collector: "",
+    enrollmentDate: new Date(),
+    collector: {} as Collector,
     profilePicture: "",
+    collectorPhone: "",
+    loanPortfolio: 0,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,13 +50,18 @@ export function CreateTownDialog({
     onSubmit({
       ...formData,
       enrollmentDate: new Date(formData.enrollmentDate),
+      collectorPhone: "",
+      loanPortfolio: 0,
+      id: 0,
     });
     setFormData({
       name: "",
       nickname: "",
-      enrollmentDate: "",
-      collector: "",
+      enrollmentDate: new Date(),
+      collector: {} as Collector,
       profilePicture: "",
+      collectorPhone: "",
+      loanPortfolio: 0,
     });
   };
 
@@ -101,9 +103,12 @@ export function CreateTownDialog({
               <Input
                 id="enrollmentDate"
                 type="date"
-                value={formData.enrollmentDate}
+                value={formData.enrollmentDate.toISOString()}
                 onChange={(e) =>
-                  setFormData({ ...formData, enrollmentDate: e.target.value })
+                  setFormData({
+                    ...formData,
+                    enrollmentDate: new Date(e.target.value),
+                  })
                 }
                 required
               />
@@ -111,9 +116,12 @@ export function CreateTownDialog({
             <div className="space-y-2">
               <Label htmlFor="collector">Collector *</Label>
               <Select
-                value={formData.collector}
+                value={formData.collector.id}
                 onValueChange={(value) =>
-                  setFormData({ ...formData, collector: value })
+                  setFormData({
+                    ...formData,
+                    collector: collectors.find((c) => c.id === value)!,
+                  })
                 }
                 required
               >
@@ -122,8 +130,12 @@ export function CreateTownDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {collectors.map((collector) => (
-                    <SelectItem key={collector.id} value={collector.name}>
-                      {collector.name}
+                    <SelectItem key={collector.id} value={collector.id}>
+                      {collector.firstName +
+                        " " +
+                        collector.secondName +
+                        " " +
+                        collector.thirdName}
                     </SelectItem>
                   ))}
                 </SelectContent>
