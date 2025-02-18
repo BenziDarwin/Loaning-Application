@@ -12,18 +12,8 @@ export const login = async (data: LoginRequest): Promise<boolean> => {
     let response = await axios.post(`${baseURL}auth/authenticate`, data);
 
     // Store the token and user data in cookies
-    Cookies.set("access-token", response.data.token, {
-      httpOnly: true, // Makes cookie inaccessible to client-side JS
-      //secure: true,   // Cookie only sent over HTTPS
-      sameSite: "lax", // Controls how cookie is sent with cross-site requests
-      path: "/", // Cookie available for entire site
-    });
-    Cookies.set("user", JSON.stringify(response.data), {
-      httpOnly: true, // Makes cookie inaccessible to client-side JS
-      //secure: true,   // Cookie only sent over HTTPS
-      sameSite: "lax", // Controls how cookie is sent with cross-site requests
-      path: "/", // Cookie available for entire site
-    });
+    Cookies.set("access-token", response.data.token);
+    Cookies.set("user", JSON.stringify(response.data));
 
     return true;
   } catch (error: any) {
