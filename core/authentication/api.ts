@@ -13,14 +13,16 @@ export const login = async (data: LoginRequest): Promise<boolean> => {
 
     // Store the token and user data in cookies
     Cookies.set("access-token", response.data.token, {
-      expires: 1,
-      secure: true,
-      sameSite: "Strict",
+      httpOnly: true, // Makes cookie inaccessible to client-side JS
+      //secure: true,   // Cookie only sent over HTTPS
+      sameSite: "lax", // Controls how cookie is sent with cross-site requests
+      path: "/", // Cookie available for entire site
     });
     Cookies.set("user", JSON.stringify(response.data), {
-      expires: 1,
-      secure: true,
-      sameSite: "Strict",
+      httpOnly: true, // Makes cookie inaccessible to client-side JS
+      //secure: true,   // Cookie only sent over HTTPS
+      sameSite: "lax", // Controls how cookie is sent with cross-site requests
+      path: "/", // Cookie available for entire site
     });
 
     return true;
