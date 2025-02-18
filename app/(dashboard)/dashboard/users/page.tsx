@@ -14,7 +14,7 @@ import {
 import { CreateUserDialog } from "@/components/users/create-user-dialog";
 import { EditUserDialog } from "@/components/users/edit-user-dialog";
 import { DeleteConfirmDialog } from "@/components/users/delete-confirm-dialog";
-import { deleteUser, getUsers, updateUser } from "@/core/user/api";
+import { createUser, deleteUser, getUsers, updateUser } from "@/core/user/api";
 import { User } from "@/types/users";
 
 export default function UsersPage() {
@@ -24,13 +24,20 @@ export default function UsersPage() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const handleCreateUser = (user: Omit<User, "id">) => {
-    const newUser = {
-      ...user,
-      id: 0,
-    };
-    setUsers([...users, newUser]);
-    setIsCreateOpen(false);
+  const handleCreateUser = async (user: Omit<User, "id">) => {
+    try {
+      // Create the user on the server
+      const response = await createUser(user);
+      console.log(response);
+      const newUser = {
+        ...user,
+        id: 0,
+      };
+      setUsers([...users, newUser]);
+      setIsCreateOpen(false);
+    } catch (error) {
+      console.error("Failed to create user", error);
+    }
   };
 
   const handleEditUser = async (updatedUser: User) => {

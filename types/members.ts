@@ -56,7 +56,7 @@ export interface Town {
   name: string; // Required
   nickname?: string; // Optional
   enrollmentDate: Date; // Required
-  collector: string; // Required - Selected from available collectors
+  collector: Collector; // Required - Selected from available collectors
   collectorPhone: string; // Auto-filled based on collector
   profilePicture?: string; // Optional - URL to stored image
   loanPortfolio: number; // Total standing balances of all clients

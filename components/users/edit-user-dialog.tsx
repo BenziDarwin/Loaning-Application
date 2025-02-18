@@ -21,6 +21,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Role, UserRole, UserStatus } from "@/types/roles";
 import { User } from "@/types/users";
+import { getRoles } from "@/core/roles/api";
 
 interface EditUserDialogProps {
   user: User;
@@ -36,11 +37,21 @@ export function EditUserDialog({
   onSubmit,
 }: EditUserDialogProps) {
   const [formData, setFormData] = useState<User>(user);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<Role[]>(user.roles);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     setFormData(user);
   }, [user]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await getRoles();
+      setRoles(response);
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (
     field: keyof User,
@@ -57,7 +68,7 @@ export function EditUserDialog({
     setIsSubmitting(true);
 
     try {
-      await onSubmit(formData);
+      onSubmit({ ...formData, roles: selectedRoles });
       onOpenChange(false);
     } catch (error) {
       console.error("Error updating user:", error);
@@ -66,9 +77,10 @@ export function EditUserDialog({
     }
   };
 
-  const hasChanges = Object.entries(formData).some(
-    ([key, value]) => value !== user[key as keyof User],
-  );
+  const hasChanges =
+    Object.entries(formData).some(
+      ([key, value]) => value !== user[key as keyof User],
+    ) || selectedRoles[0].name !== user.roles[0].name;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -101,22 +113,16 @@ export function EditUserDialog({
                 onChange={(e) => handleChange("email", e.target.value)}
                 placeholder="Enter email address"
                 required
-                disabled={isSubmitting}
+                disabled={true}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="roles">Roles</Label>
               <Select
-                value={formData.roles[0]?.name}
+                value={selectedRoles[0].name}
                 onValueChange={(roleName) => {
-                  // This is a simplified example - you might want to handle multiple roles
-                  handleChange("roles", [
-                    {
-                      id: 0,
-                      name: roleName as UserRole,
-                      description: "",
-                      permissions: [],
-                    },
+                  setSelectedRoles([
+                    roles.find((role) => role.name === roleName) as Role,
                   ]);
                 }}
                 disabled={isSubmitting}
@@ -124,12 +130,22 @@ export function EditUserDialog({
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
+
                 <SelectContent>
-                  <SelectItem value="ROLE_ADMIN">Admin</SelectItem>
-                  <SelectItem value="ROLE_LOAN_OFFICER">
-                    Loan Officer
-                  </SelectItem>
-                  <SelectItem value="ROLE_USER">User</SelectItem>
+                  {roles.map((role) => (
+                    <>
+                      <SelectItem value={role.name}>
+                        {role.name
+                          .split("_")
+                          .map(
+                            (name) =>
+                              name[0].toUpperCase() +
+                              name.toLowerCase().slice(1),
+                          )
+                          .join(" ")}
+                      </SelectItem>
+                    </>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

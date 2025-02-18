@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import {
@@ -13,12 +13,24 @@ import {
 } from "@/components/ui/table";
 import { CreateTownDialog } from "@/components/onboarding/create-town-dialog";
 import type { Town } from "@/types/members";
-
-const initialTowns: Town[] = [];
+import { getTowns } from "@/core/towns/api";
 
 export default function OnboardingTownsPage() {
-  const [towns, setTowns] = useState<Town[]>(initialTowns);
+  const [towns, setTowns] = useState<Town[]>([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response = await getTowns();
+        console.log(response);
+        setTowns(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleCreateTown = (
     town: Omit<Town, "id" | "collectorPhone" | "loanPortfolio">,
@@ -65,7 +77,13 @@ export default function OnboardingTownsPage() {
               <TableRow key={town.id}>
                 <TableCell className="font-medium">{town.name}</TableCell>
                 <TableCell>{town.nickname || "N/A"}</TableCell>
-                <TableCell>{town.collector}</TableCell>
+                <TableCell>
+                  {town.collector.firstName +
+                    " " +
+                    town.collector.secondName +
+                    " " +
+                    town.collector.thirdName}
+                </TableCell>
                 <TableCell>
                   {town.enrollmentDate.toLocaleDateString()}
                 </TableCell>

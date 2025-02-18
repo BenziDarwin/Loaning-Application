@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,6 +21,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { User } from "@/types/users";
 import { Role, UserRole, UserStatus } from "@/types/roles";
+import { getRoles } from "@/core/roles/api";
 
 interface CreateUserDialogProps {
   open: boolean;
@@ -35,15 +36,30 @@ export function CreateUserDialog({
 }: CreateUserDialogProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
   const [status, setStatus] = useState<UserStatus>("ACTIVE");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await getRoles();
+      setRoles(response);
+    };
+    fetchData();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
+    if (selectedRoles.length === 0) {
+      alert("Please select a role");
+      return;
+    }
     e.preventDefault();
     onSubmit({
       name,
       email,
       roles: selectedRoles,
+      password,
       status,
     });
 
@@ -87,21 +103,25 @@ export function CreateUserDialog({
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                required
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="roles">Roles</Label>
               <Select
                 value={
                   selectedRoles.length > 0 ? selectedRoles[0].name : undefined
                 }
                 onValueChange={(roleName) => {
-                  // This is a simplified example - you might want to fetch the full role object
-                  // or handle multiple role selection differently
                   setSelectedRoles([
-                    {
-                      id: 0, // This should be handled properly in a real implementation
-                      name: roleName as UserRole,
-                      description: "",
-                      permissions: [],
-                    },
+                    roles.find((role) => role.name === roleName) as Role,
                   ]);
                 }}
                 required
@@ -110,11 +130,20 @@ export function CreateUserDialog({
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ROLE_ADMIN">Admin</SelectItem>
-                  <SelectItem value="ROLE_LOAN_OFFICER">
-                    Loan Officer
-                  </SelectItem>
-                  <SelectItem value="ROLE_USER">User</SelectItem>
+                  {roles.map((role) => (
+                    <>
+                      <SelectItem value={role.name}>
+                        {role.name
+                          .split("_")
+                          .map(
+                            (name) =>
+                              name[0].toUpperCase() +
+                              name.toLowerCase().slice(1),
+                          )
+                          .join(" ")}
+                      </SelectItem>
+                    </>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

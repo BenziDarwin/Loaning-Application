@@ -13,13 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-
-interface Role {
-  id: string;
-  name: string;
-  description: string;
-  permissions: string[];
-}
+import { Role } from "@/types/roles";
+import { Permission } from "@/types/permissions";
+import { getPermissions } from "@/core/permissions/api";
 
 interface EditRoleDialogProps {
   role: Role;
@@ -27,13 +23,6 @@ interface EditRoleDialogProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (role: Role) => void;
 }
-
-const availablePermissions = [
-  { id: "users.manage", label: "Manage Users" },
-  { id: "roles.manage", label: "Manage Roles" },
-  { id: "loans.manage", label: "Manage Loans" },
-  { id: "reports.view", label: "View Reports" },
-];
 
 export function EditRoleDialog({
   role,
@@ -43,13 +32,26 @@ export function EditRoleDialog({
 }: EditRoleDialogProps) {
   const [name, setName] = useState(role.name);
   const [description, setDescription] = useState(role.description);
-  const [permissions, setPermissions] = useState<string[]>(role.permissions);
+  const [availablePermissions, setAvailablePermissions] = useState<
+    Permission[]
+  >([]);
+  const [permissions, setPermissions] = useState<Permission[]>(
+    role.permissions,
+  );
 
   useEffect(() => {
     setName(role.name);
     setDescription(role.description);
     setPermissions(role.permissions);
   }, [role]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await getPermissions();
+      setAvailablePermissions(response);
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,10 +63,10 @@ export function EditRoleDialog({
     });
   };
 
-  const togglePermission = (permission: string) => {
+  const togglePermission = (permission: Permission) => {
     setPermissions(
       permissions.includes(permission)
-        ? permissions.filter((p) => p !== permission)
+        ? permissions.filter((p) => p.name !== permission.name)
         : [...permissions, permission],
     );
   };
@@ -107,15 +109,15 @@ export function EditRoleDialog({
                     className="flex items-center space-x-2"
                   >
                     <Checkbox
-                      id={permission.id}
-                      checked={permissions.includes(permission.id)}
-                      onCheckedChange={() => togglePermission(permission.id)}
+                      id={permission.id!.toString()}
+                      checked={permissions.some((p) => p.id === permission.id)}
+                      onCheckedChange={() => togglePermission(permission)}
                     />
                     <label
-                      htmlFor={permission.id}
+                      htmlFor={permission.id.toString()}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      {permission.label}
+                      {permission.name}
                     </label>
                   </div>
                 ))}

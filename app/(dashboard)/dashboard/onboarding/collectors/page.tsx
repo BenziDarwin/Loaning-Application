@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import {
@@ -13,12 +13,24 @@ import {
 } from "@/components/ui/table";
 import { CreateCollectorDialog } from "@/components/onboarding/create-collector-dialog";
 import type { Collector } from "@/types/members";
-
-const initialCollectors: Collector[] = [];
+import { getCollectors } from "@/core/collectors/api";
 
 export default function OnboardingCollectorsPage() {
-  const [collectors, setCollectors] = useState<Collector[]>(initialCollectors);
+  const [collectors, setCollectors] = useState<Collector[]>([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response = await getCollectors();
+        console.log(response);
+        setCollectors(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleCreateCollector = (
     collector: Omit<Collector, "id" | "enrollmentDate" | "password">,

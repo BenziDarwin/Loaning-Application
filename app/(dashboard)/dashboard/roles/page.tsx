@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import {
@@ -14,58 +14,62 @@ import {
 import { CreateRoleDialog } from "@/components/roles/create-role-dialog";
 import { EditRoleDialog } from "@/components/roles/edit-role-dialog";
 import { DeleteConfirmDialog } from "@/components/roles/delete-confirm-dialog";
-
-interface Role {
-  id: string;
-  name: string;
-  description: string;
-  permissions: string[];
-}
-
-const initialRoles: Role[] = [
-  {
-    id: "1",
-    name: "Admin",
-    description: "Full system access",
-    permissions: ["users.manage", "roles.manage", "loans.manage"],
-  },
-  {
-    id: "2",
-    name: "Manager",
-    description: "Loan management access",
-    permissions: ["loans.manage"],
-  },
-];
+import { createRole, deleteRole, getRoles, updateRole } from "@/core/roles/api";
+import { Role } from "@/types/roles";
 
 export default function RolesPage() {
-  const [roles, setRoles] = useState<Role[]>(initialRoles);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const handleCreateRole = (role: Omit<Role, "id">) => {
-    const newRole = {
-      ...role,
-      id: Math.random().toString(36).substr(2, 9),
+  const handleCreateRole = async (role: Role) => {
+    try {
+      await createRole(role);
+      const newRole = {
+        ...role,
+      };
+      setRoles([...roles, newRole]);
+      setIsCreateOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await getRoles();
+      setRoles(response);
     };
-    setRoles([...roles, newRole]);
-    setIsCreateOpen(false);
-  };
+    fetchData();
+  }, []);
 
-  const handleEditRole = (updatedRole: Role) => {
-    setRoles(
-      roles.map((role) => (role.id === updatedRole.id ? updatedRole : role)),
-    );
-    setIsEditOpen(false);
-    setSelectedRole(null);
-  };
-
-  const handleDeleteRole = () => {
-    if (selectedRole) {
-      setRoles(roles.filter((role) => role.id !== selectedRole.id));
-      setIsDeleteOpen(false);
+  const handleEditRole = async (updatedRole: Role) => {
+    try {
+      // Update role in the backend
+      await updateRole(updatedRole.id!, updatedRole);
+      setRoles(
+        roles.map((role) => (role.id === updatedRole.id ? updatedRole : role)),
+      );
+      setIsEditOpen(false);
       setSelectedRole(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteRole = async () => {
+    if (selectedRole) {
+      try {
+        // Delete role in the backend
+        await deleteRole(selectedRole.id!);
+        setRoles(roles.filter((role) => role.id !== selectedRole.id));
+        setIsDeleteOpen(false);
+        setSelectedRole(null);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -101,10 +105,10 @@ export default function RolesPage() {
                   <div className="flex flex-wrap gap-1">
                     {role.permissions.map((permission) => (
                       <span
-                        key={permission}
+                        key={permission.id}
                         className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
                       >
-                        {permission}
+                        {permission.name}
                       </span>
                     ))}
                   </div>
