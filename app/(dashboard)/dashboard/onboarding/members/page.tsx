@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import {
@@ -13,12 +13,24 @@ import {
 } from "@/components/ui/table";
 import { CreateMemberDialog } from "@/components/onboarding/create-member-dialog";
 import type { Member } from "@/types/members";
-
-const initialMembers: Member[] = [];
+import { getAllMembers } from "@/core/members/api";
 
 export default function OnboardingMembersPage() {
-  const [members, setMembers] = useState<Member[]>(initialMembers);
+  const [members, setMembers] = useState<Member[]>([]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response = await getAllMembers();
+        console.log(response);
+        setMembers(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleCreateMember = (
     member: Omit<
